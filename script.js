@@ -155,6 +155,36 @@ tabsContainer.addEventListener('click', function (e) {
     .classList.add('operations__content--active');
 });
 
+//--------------------------NAV-TABS FOCUS MOUSE HOVER---------------------
+const nav = document.querySelector('nav')
+
+function changeLinkOpacity(e, opacity){
+  if(e.target.classList.contains('nav__link')) {
+    const link = e.target;
+    const siblings = link.closest('.nav').querySelectorAll('.nav__link');
+    const logo = link.closest('.nav').querySelector('img');
+
+    siblings.forEach(el => {
+      if(el !== link) {
+        el.style.opacity = opacity;
+      }
+      logo.style.opacity = opacity;
+    })
+  } 
+}
+
+nav.addEventListener('mouseover', e => changeLinkOpacity(e, 0.5));
+
+nav.addEventListener('mouseout', e => changeLinkOpacity(e, 1));
+
+//-----------------------------STICKY NAV-------------------------------- 
+const s1coordinates = section1.getBoundingClientRect();
+
+window.addEventListener('scroll', function(){
+  if(this.window.scrollY > s1coordinates.top) nav.classList.add('sticky');
+  else nav.classList.remove('sticky')
+})
+
 // ///Lecture 2 - Styles
 // message.style.backgroundColor = '#090909';
 // message.style.width = '120%';
