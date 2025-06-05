@@ -177,7 +177,7 @@ nav.addEventListener('mouseover', e => changeLinkOpacity(e, 0.5));
 
 nav.addEventListener('mouseout', e => changeLinkOpacity(e, 1));
 
-//-----------------------------STICKY NAV-------------------------------- 
+//-----------------------------STICKY NAVBAR-------------------------------- 
 const s1coordinates = section1.getBoundingClientRect();
 
 window.addEventListener('scroll', function(){
