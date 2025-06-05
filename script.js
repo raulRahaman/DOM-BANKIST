@@ -156,34 +156,49 @@ tabsContainer.addEventListener('click', function (e) {
 });
 
 //--------------------------NAV-TABS FOCUS MOUSE HOVER---------------------
-const nav = document.querySelector('nav')
+const nav = document.querySelector('nav');
 
-function changeLinkOpacity(e, opacity){
-  if(e.target.classList.contains('nav__link')) {
+function changeLinkOpacity(e, opacity) {
+  if (e.target.classList.contains('nav__link')) {
     const link = e.target;
     const siblings = link.closest('.nav').querySelectorAll('.nav__link');
     const logo = link.closest('.nav').querySelector('img');
 
     siblings.forEach(el => {
-      if(el !== link) {
+      if (el !== link) {
         el.style.opacity = opacity;
       }
       logo.style.opacity = opacity;
-    })
-  } 
+    });
+  }
 }
 
 nav.addEventListener('mouseover', e => changeLinkOpacity(e, 0.5));
 
 nav.addEventListener('mouseout', e => changeLinkOpacity(e, 1));
 
-//-----------------------------STICKY NAVBAR-------------------------------- 
+//-----------------------------STICKY NAVBAR--------------------------------
 const s1coordinates = section1.getBoundingClientRect();
 
-window.addEventListener('scroll', function(){
-  if(this.window.scrollY > s1coordinates.top) nav.classList.add('sticky');
-  else nav.classList.remove('sticky')
-})
+window.addEventListener('scroll', function () {
+  if (this.window.scrollY > s1coordinates.top) nav.classList.add('sticky');
+  else nav.classList.remove('sticky');
+});
+//-------------------------STICKY NAVBAR Intersection API--------------------------------
+//also takes object in args
+function obsCallBack(entries, observer) {
+  entries.forEach(function (entry) {
+    console.log(entry);
+  });
+}
+
+const obsOptions = {
+  root: null,
+  threshold: 0.1,
+};
+//args: call back function, object
+const observer = new IntersectionObserver(obsCallBack, obsOptions);
+observer.observe(section1);
 
 // ///Lecture 2 - Styles
 // message.style.backgroundColor = '#090909';
