@@ -176,6 +176,7 @@ nav.addEventListener('mouseover', e => changeLinkOpacity(e, 0.5));
 nav.addEventListener('mouseout', e => changeLinkOpacity(e, 1));
 
 //-----------------------------STICKY NAVBAR-------------------------------- 
+//old way, not performance efficient
 /*
 const s1coordinates = section1.getBoundingClientRect();
 
@@ -185,7 +186,7 @@ window.addEventListener('scroll', function(){
 });
 */
 //-------------------------STICKY NAVBAR Intersection API--------------------------------
-
+const navHeight = nav.getBoundingClientRect().height;
 //also takes object in args
 function obsCallBack(entries) {
   const [entry] = entries;
@@ -196,9 +197,69 @@ function obsCallBack(entries) {
 //args: call back function, object
 const observer = new IntersectionObserver(obsCallBack, {
   threshold: 0,
-  rootMargin: '-90px'
+  rootMargin: `-${navHeight}px`,
 });
 observer.observe(header);
+
+//---------------------------REVEAL SECTIONS---------------------------
+const sections = document.querySelectorAll('.section');
+
+const sectionAppear = new IntersectionObserver(sectionCallBack, {
+  threshold: 0.2,
+});
+//add hidden class to all sections
+sections.forEach(section => {
+  sectionAppear.observe(section);
+  section.classList.add('section--hidden');
+})
+
+//function that will get called back
+function sectionCallBack(entries, observer){
+  entries.forEach(entry => {
+
+    //can add class if using target
+    if(!entry.isIntersecting) return;
+    entry.target.classList.remove('section--hidden');
+    
+    sectionAppear.unobserve(entry.target)
+  });
+
+    // old way of doing it
+  // entries.forEach(entry => {
+  //   if(entry.isIntersecting) {
+  //     sections.forEach(section => section.classList.remove('section--hidden'))
+  //   };
+  // })
+}
+
+//---------------------------LAZY LOADING IMAGES---------------------------
+const imagesLazy = document.querySelectorAll('img[data-src]');
+
+const imageObs = new IntersectionObserver(imgCallBack, {
+  threshold: 0,
+  rootMargin: '100px',
+})
+
+
+function imgCallBack(entries, obs){
+  entries.forEach(entry => {
+    if(!entry.isIntersecting) return;
+    const image = entry.target;
+    image.src = image.dataset.src;
+    //Only removes the filter once the full HD image has
+    // been loade
+    image.addEventListener('load', function(){
+      image.classList.remove('lazy-img');
+    });
+    obs.unobserve(image)
+  })
+}
+
+imagesLazy.forEach(img => {
+  imageObs.observe(img);
+});
+
+//---------------------------SLIDER---------------------------
 
 // ///Lecture 2 - Styles
 // message.style.backgroundColor = '#090909';
